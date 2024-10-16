@@ -14,6 +14,8 @@ services:
       target: mysql$DEFAULTARGS
     volumes:
       - "mysql:/var/lib/mysql"
+    networks:
+      - my-network
 
   makeproject:
     image: boinc/server_makeproject:$VERSION$TAG$DEFAULTARGS
@@ -31,6 +33,8 @@ services:
     environment:
       - URL_BASE
       - PROJECT
+    networks:
+      - my-network
 
   apache:
     image: boinc/server_apache:$VERSION$TAG$DEFAULTARGS
@@ -56,3 +60,9 @@ services:
     environment:
       - URL_BASE
       - PROJECT
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge

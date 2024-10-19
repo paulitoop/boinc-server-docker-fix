@@ -1,0 +1,28 @@
+https://github.com/BOINC/boinc/wiki/KeySetup
+https://github.com/BOINC/boinc/wiki/Create-a-BOINC-server-(cookbook)
+
+
+mkdir apps/fibonacci
+
+apt-get install python3
+apt-get install python3-pip
+python3 -m pip install pyinstaller -v
+pyinstaller --onefile fibonacci.py
+
+
+cd ~/projects/test/html/ops
+htpasswd -c .htpasswd admin <<< admin
+
+cd ~/projects/test
+cp ~/boinc/apps/fibonacci_in templates
+cp ~/boinc/apps/fibonacci_out templates
+
+in config.xml
+      <daemon>
+          <cmd>sample_trivial_validator --app fibonacci</cmd>
+      </daemon>
+      <daemon>
+          <cmd>sample_assimilator --app fibonacci</cmd>
+      </daemon>
+
+sudo apt install wine

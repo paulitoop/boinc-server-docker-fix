@@ -7,6 +7,11 @@ FROM php:7.0.31-apache-stretch AS base
 
 LABEL maintainer="Marius Millea <mariusmillea@gmail.com>"
 
+RUN echo "" > /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian stretch main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list 
+
+
 # install packages 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -41,8 +46,6 @@ RUN chmod 644 /etc/logrotate.d/boincserver
 COPY makeproject-step3.sh /usr/bin/
 COPY supervisord.conf /etc/supervisor/conf.d/
 CMD ["/usr/bin/supervisord"]
-
-
 
 #====================
 FROM base AS base-b2d
@@ -81,9 +84,23 @@ ONBUILD RUN mkdir $PROJECT_ROOT && chown $BOINC_USER:$BOINC_USER $PROJECT_ROOT
 ONBUILD WORKDIR $PROJECT_ROOT
 
 
+
 #================================
 FROM apache AS apache-defaultargs
 #================================
 
 # this triggers the ONBUILD directives using the default ARGs so we also get a
 # fully built example image
+
+COPY apps/* /tmp/apps/
+USER boincadm
+RUN mkdir tmp_apps
+RUN cp /tmp/apps/* /home/boincadm/project/tmp_apps
+# RUN cp tmp_apps/uppercase_in templates
+# RUN cp tmp_apps/uppercase_out templates
+RUN mkdir -p apps/uppercase/1.0/x86_64-pc-linux-gnu
+RUN cp tmp_apps/uppercase apps/uppercase/1.0/x86_64-pc-linux-gnu/
+RUN cp tmp_apps/version.xml apps/uppercase/1.0/x86_64-pc-linux-gnu
+# RUN cd html/ops
+# RUN "htpasswd -i -c .htpasswd admin <<< admin "
+USER root

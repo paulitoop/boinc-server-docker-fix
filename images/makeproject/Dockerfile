@@ -7,9 +7,15 @@ FROM debian:stretch-slim AS base
 
 LABEL maintainer="Marius Millea <mariusmillea@gmail.com>"
 
+#update repos
+RUN echo "" > /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian stretch main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list 
+
 # install packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        net-tools \
         ca-certificates \
         curl \
         dh-autoreconf \
@@ -25,7 +31,6 @@ RUN apt-get update \
         php7.0-mysql \
         php7.0-xml \
         pkg-config \
-        python \
         python3 \
         python-mysqldb \
         python3-mysqldb \
@@ -50,7 +55,11 @@ FROM debian:stretch-slim AS b2d
 
 # do boinc2docker as a separate stage so we don't have to keep re-downloading
 # things whenever the build cache is invalidated
-
+#update repos
+RUN echo "" > /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian stretch main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list 
+    
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \

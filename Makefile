@@ -1,7 +1,6 @@
 default:
 
-DC=docker-compose
-
+DC=docker compose
 
 up: up-mysql post-makeproject up-apache
 
@@ -14,7 +13,8 @@ build:
 pull: 
 	$(DC) pull
 
-
+rebuild-apache:
+	$(DC) down -v && $(DC) build  apache && $(DC) up -d
 #--- project ---
 
 makeproject: 

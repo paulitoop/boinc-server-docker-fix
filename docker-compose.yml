@@ -17,6 +17,34 @@ services:
     networks:
       - my-network
 
+  apache:
+    image: boinc/server_apache:$VERSION$TAG$DEFAULTARGS
+    build: 
+      context: images/apache
+      target: apache$DEFAULTARGS
+      args:
+        - TAG
+        - BOINC_USER
+        - PROJECT_ROOT
+        - DOCKERFILE_NAME
+    hostname: $PROJECT
+    depends_on:
+      - mysql
+    volumes: 
+      - "project:$PROJECT_ROOT"
+      - "results:/results"
+      - "secrets:/run/secrets"
+      - "/dev/null:/run/secrets/keys/code_sign_private"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports: 
+      - "80:80"
+    tty: true
+    environment:
+      - URL_BASE
+      - PROJECT
+    networks:
+      - my-network
+
   makeproject:
     image: boinc/server_makeproject:$VERSION$TAG$DEFAULTARGS
     build: 
@@ -36,32 +64,7 @@ services:
     networks:
       - my-network
 
-  apache:
-    image: boinc/server_apache:$VERSION$TAG$DEFAULTARGS
-    build: 
-      context: images/apache
-      target: apache$DEFAULTARGS
-      args:
-        - TAG
-        - BOINC_USER
-        - PROJECT_ROOT
-    hostname: $PROJECT
-    depends_on:
-      - mysql
-    volumes: 
-      - "project:$PROJECT_ROOT"
-      - "results:/results"
-      - "secrets:/run/secrets"
-      - "/dev/null:/run/secrets/keys/code_sign_private"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    ports: 
-      - "80:80"
-    tty: true
-    environment:
-      - URL_BASE
-      - PROJECT
-    networks:
-      - my-network
+  
 
 networks:
   my-network:

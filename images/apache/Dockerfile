@@ -94,13 +94,23 @@ FROM apache AS apache-defaultargs
 
 COPY apps/* /tmp/apps/
 USER boincadm
+# RUN bin/start
 RUN mkdir tmp_apps
 RUN cp /tmp/apps/* /home/boincadm/project/tmp_apps
+
+# COPY configs/project.xml project.xml
+# COPY configs/config.xml config.xml
+# #RUN sed -i 's/define("PROJECT", "boincserver");/define("PROJECT", "Williams Ukpere Project");/' html/project/project.inc
+# #RUN bin/xadd
+
 # RUN cp tmp_apps/uppercase_in templates
 # RUN cp tmp_apps/uppercase_out templates
-RUN mkdir -p apps/uppercase/1.0/x86_64-pc-linux-gnu
-RUN cp tmp_apps/uppercase apps/uppercase/1.0/x86_64-pc-linux-gnu/
-RUN cp tmp_apps/version.xml apps/uppercase/1.0/x86_64-pc-linux-gnu
-# RUN cd html/ops
-# RUN "htpasswd -i -c .htpasswd admin <<< admin "
+# RUN mkdir -p apps/uppercase/1.0/x86_64-pc-linux-gnu
+# RUN cp tmp_apps/uppercase apps/uppercase/1.0/x86_64-pc-linux-gnu/
+# RUN cp tmp_apps/version.xml apps/uppercase/1.0/x86_64-pc-linux-gnu
+#RUN cd html/ops && \
+#     echo "admin" | htpasswd -i -c .htpasswd admin
+
+#RUN echo "y" |  bin/update_versions
+# RUN bin/start
 USER root

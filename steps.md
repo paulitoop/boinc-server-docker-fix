@@ -1,8 +1,13 @@
 1. make rebuild-apache
 2. make exec-apache
+
 If server not running then 
-ln -s /home/boincadm/project/boincserver.httpd.conf /etc/apache2/conf-enabled/boincserver.httpd.conf
+1. docker compose exec apache bash
+2. ln -s /home/boincadm/project/boincserver.httpd.conf /etc/apache2/conf-enabled/boincserver.httpd.conf
 /etc/init.d/apache2 reload
+3. exit
+
+3. make exec-apache
 4. cd html/ops
 5. echo "admin" | htpasswd -i -c .htpasswd admin
 Go to http://127.0.0.1/boincserver_ops
@@ -10,7 +15,7 @@ Sign up
 go to Manage applications
 add an application
 uppercase uppercase
-6. cd ~/projects/
+6. cd ~/project/
 Add
         <daemon>
             <cmd>sample_trivial_validator --app uppercase</cmd>
@@ -35,8 +40,9 @@ cd uppercase/1.0/x86_64-pc-linux-gnu
 cp ~/project/tmp_apps/uppercase .
 cp ~/project/tmp_apps/version.xml .
 cd ~/project
-bin/sign_executable app
-s/uppercase/1.0/x86_64-pc-linux-gnu/uppercase keys/code_sign_private >> apps/uppercase/1.0/x86_64-pc-linux-gnu/uppercase.sig
+
+9.1. bin/sign_executable apps/uppercase/1.0/x86_64-pc-linux-gnu/uppercase keys/code_sign_private >> apps/uppercase/1.0/x86_64-pc-linux-gnu/uppercase.sig
+
 bin/update_versions
 
 bin/stop
@@ -48,6 +54,7 @@ Then you need to connect from you client app to the server
 And register/login
 http://127.0.0.1/boincserver
 
+bin/stage_file in
 bin/create_work --appname uppercase in
 
-resuls in upload/ folder
+And the we will have resuls in upload/ folder
